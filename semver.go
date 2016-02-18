@@ -7,6 +7,7 @@ import (
 //SemVer struct
 type SemVer struct {
 	raw        string
+	base       string
 	major      int
 	minor      int
 	patch      int
@@ -15,7 +16,7 @@ type SemVer struct {
 	loose      string
 }
 
-func (s SemVer) version() string {
+func (s SemVer) Version() *string {
 	version := fmt.Sprintf("%d.%d.%d", s.major, s.minor, s.patch)
-	return version
+	return &version
 }

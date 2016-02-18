@@ -5,11 +5,10 @@ import (
 )
 
 func main() {
-	_ = getRegexes()
-	fmt.Println("regexes loaded properly")
+	inClValues := inSemVer()
 
-	semver, err := parse("1.2.3")
+	semver, err := parse(inClValues.firstVersion)
 	panicIfError(err, "parse failed")
 
-	fmt.Println(semver.version())
+	fmt.Println(*semver.Version())
 }

@@ -26,7 +26,6 @@ func parse(version string) (*SemVer, error) {
 		return nil, err
 	}
 
-	fmt.Println(version)
 	semver, err := newSemVer(version)
 	if err != nil {
 		return nil, err
@@ -37,16 +36,19 @@ func parse(version string) (*SemVer, error) {
 func newSemVer(version string) (*SemVer, error) {
 	semver := new(SemVer)
 	semver.raw = strings.TrimSpace(version)
+	semver.base = removeLeadingV(version)
 
 	regexs := getRegexes()
 	var regex *regexp.Regexp
 	regex = regexs["MAINVERSION"]
 
-	matched := regex.FindAllString(semver.raw, -1)
+	matched := regex.FindAllString(semver.base, -1)
+
+	values := strings.Split(matched[0], ".")
 	errors := make([]error, 3)
-	semver.major, errors[0] = strconv.Atoi(matched[0])
-	semver.minor, errors[1] = strconv.Atoi(matched[1])
-	semver.patch, errors[2] = strconv.Atoi(matched[2])
+	semver.major, errors[0] = strconv.Atoi(values[0])
+	semver.minor, errors[1] = strconv.Atoi(values[1])
+	semver.patch, errors[2] = strconv.Atoi(values[2])
 	for k, err := range errors {
 		if err != nil {
 			fmt.Println(k)
@@ -60,4 +62,12 @@ func newSemVer(version string) (*SemVer, error) {
 func testValid(version string) bool {
 
 	return true
+}
+
+func removeLeadingV(version string) string {
+	trimmedVersion := strings.TrimSpace(version)
+	if strings.Index(trimmedVersion, "v") == 0 {
+		trimmedVersion = strings.Replace(trimmedVersion, "v", "", 1)
+	}
+	return trimmedVersion
 }
