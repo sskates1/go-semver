@@ -2,12 +2,13 @@ package main
 
 import "flag"
 
-type inCLValues struct {
+// InCLValues string from args
+type InCLValues struct {
 	firstVersion string
 }
 
-func inSemVer() *inCLValues {
-	out := new(inCLValues)
+func inSemVer() *InCLValues {
+	out := new(InCLValues)
 	firstString := flag.String("s", "9.9.9", "The semver string you want to parse")
 
 	flag.Parse()
